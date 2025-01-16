@@ -2,7 +2,7 @@ import { IShiftCode } from "../model/IShiftCode";
 import { dbBaseQuery } from "./db.root";
 
 // Query strings
-const SELECT_ALL_SHIFTCODE = "SELECT * FROM shiftcode";
+const SELECT_ALL_SHIFTCODE = 'SELECT * FROM shiftcode WHERE CODE != ""';
 
 // Query functions
 export const getShiftCodes = async () => {

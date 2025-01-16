@@ -1,9 +1,11 @@
 "use client";
 
 import { DataLoadbar, DataLoadbarFailed } from "@/component/Loadbar";
+import { ShiftCodeTable } from "@/component/shiftcode/ShiftcodeTable";
 import { getShiftCodes } from "@/lib/db_service/db_shitfcode";
 import { shiftcodeSlice } from "@/lib/store/features/shiftcode";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { Box } from "@mui/material";
 import { useEffect, useRef } from "react";
 
 const Page = () => {
@@ -29,7 +31,11 @@ const Page = () => {
 
   if (!dbCalled) return <DataLoadbar />;
   if (!loadSuccess) return <DataLoadbarFailed />;
-  return <div>load complete</div>;
+  return (
+    <Box display="flex" justifyContent="center">
+      <ShiftCodeTable data={data} />
+    </Box>
+  );
 };
 
 export default Page;
