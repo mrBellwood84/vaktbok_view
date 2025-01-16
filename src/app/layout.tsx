@@ -3,7 +3,7 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
-import { CssBaseline } from "@mui/material";
+import { Container, CssBaseline } from "@mui/material";
 import type { Metadata } from "next";
 import { ReactNode } from "react";
 
@@ -26,7 +26,7 @@ const RootLayout = ({ children }: IProps) => {
         <body>
           <StoreProvider>
             <TopBar />
-            {children}
+            <Container sx={{ mt: 2 }}>{children}</Container>
           </StoreProvider>
         </body>
       </html>
