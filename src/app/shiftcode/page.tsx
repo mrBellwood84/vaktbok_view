@@ -21,6 +21,7 @@ const Page = () => {
       getShiftCodes()
         .then((data) => {
           dispatch(shiftcodeSlice.actions.setAllShiftCodes(data));
+          dispatch(shiftcodeSlice.actions.setLoadSuccess(true));
         })
         .finally(() => {
           dispatch(shiftcodeSlice.actions.setDbCalled());

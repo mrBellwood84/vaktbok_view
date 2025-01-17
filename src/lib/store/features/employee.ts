@@ -5,6 +5,7 @@ interface IEmployeeState {
   data: IEmployee[];
   filtered: IEmployee[];
   selected?: IEmployee;
+
   dbCalled: boolean;
   loadSuccess: boolean;
 }
@@ -20,20 +21,22 @@ export const employeeSlice = createSlice({
   name: "employee",
   initialState,
   reducers: {
-    setDbCalled: (state) => {
-      state.dbCalled = true;
-    },
     setAllEmployees: (state, action: PayloadAction<IEmployee[]>) => {
       state.data = action.payload.sort((a, b) => {
         if (a.name < b.name) return -1;
         return 1;
       });
       state.filtered = state.data;
-      state.loadSuccess = true;
     },
     setSelectedEmployee: (state, action: PayloadAction<IEmployee>) => {
       state.selected = action.payload;
-      console.log(state.selected);
+    },
+
+    setDbCalled: (state) => {
+      state.dbCalled = true;
+    },
+    setLoadSuccess: (state, action: PayloadAction<boolean>) => {
+      state.loadSuccess = action.payload;
     },
   },
 });

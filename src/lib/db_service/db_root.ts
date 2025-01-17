@@ -12,6 +12,8 @@ const options: ConnectionOptions = {
 export const dbBaseQuery = async (query: string) => {
   const conn = await createConnection(options);
   const [result] = await conn.query(query);
+  // connection must be ended here!!!
+  // Does not seems to close by garbage collector
   conn.end();
   return result;
 };

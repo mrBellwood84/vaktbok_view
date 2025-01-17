@@ -21,6 +21,7 @@ const Page = () => {
       getAllEmployee()
         .then((data) => {
           dispatch(employeeSlice.actions.setAllEmployees(data));
+          dispatch(employeeSlice.actions.setLoadSuccess(true));
         })
         .finally(() => {
           dispatch(employeeSlice.actions.setDbCalled());
