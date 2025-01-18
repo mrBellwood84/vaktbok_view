@@ -1,6 +1,6 @@
 "use server";
 
-import { IEmployee } from "../model/IEmployee";
+import { IEmployee } from "@/lib/model/IEmployee";
 import { dbBaseQuery } from "./db_root";
 
 const SELECT_ALL_EMPLOYEE = "SELECT * FROM employee";

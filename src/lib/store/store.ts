@@ -2,11 +2,13 @@ import { configureStore } from "@reduxjs/toolkit";
 
 import { shiftcodeSlice } from "./features/shiftcode";
 import { employeeSlice } from "./features/employee";
+import { scheduleSlice } from "./features/schedule";
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       employee: employeeSlice.reducer,
+      schedule: scheduleSlice.reducer,
       shiftcode: shiftcodeSlice.reducer,
     },
   });

@@ -3,7 +3,7 @@
 import { EmployeeList } from "@/component/employee/EmployeeList";
 import { EmployeeMainCard } from "@/component/employee/EmployeeMainCard";
 import { DataLoadbar, DataLoadbarFailed } from "@/component/Loadbar";
-import { getAllEmployee } from "@/lib/db_service/db_employee";
+import { getAllEmployee } from "@/lib/db_service/query/db_employee";
 import { employeeSlice } from "@/lib/store/features/employee";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { Grid2 } from "@mui/material";

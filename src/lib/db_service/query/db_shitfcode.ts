@@ -1,6 +1,6 @@
 "use server";
 
-import { IShiftCode } from "../model/IShiftCode";
+import { IShiftCode } from "@/lib/model/IShiftCode";
 import { dbBaseQuery } from "./db_root";
 
 // Query strings

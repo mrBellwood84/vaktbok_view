@@ -2,7 +2,7 @@
 
 import { DataLoadbar, DataLoadbarFailed } from "@/component/Loadbar";
 import { ShiftCodeTable } from "@/component/shiftcode/ShiftcodeTable";
-import { getShiftCodes } from "@/lib/db_service/db_shitfcode";
+import { getShiftCodes } from "@/lib/db_service/query/db_shitfcode";
 import { shiftcodeSlice } from "@/lib/store/features/shiftcode";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { Box } from "@mui/material";
