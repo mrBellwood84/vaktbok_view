@@ -1,5 +1,6 @@
 "use client";
 
+import { getShiftByWeekYear } from "@/lib/db_service/query/db_schedule";
 import { scheduleSlice } from "@/lib/store/features/schedule";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { getNowDateString } from "@/lib/utils/datetimeFunctions";
@@ -97,7 +98,19 @@ export const YearWeekSelect = () => {
   };
 
   const setWorkweekSchedule = (weekN: number, year: number) => {
-    console.log("DEV :: load workweek data not implemented", weekN, year);
+    dispatch(scheduleSlice.actions.reloadDbShift());
+    getShiftByWeekYear(weekN, year)
+      .then((data) => {
+        const reformed = data.map((x) => {
+          x.timestamp = x.timestamp.toLocaleString();
+          return x;
+        });
+        dispatch(scheduleSlice.actions.setAllShifts(reformed));
+        dispatch(scheduleSlice.actions.setDbShiftSuccess());
+      })
+      .finally(() => {
+        dispatch(scheduleSlice.actions.setDbShiftCalled());
+      });
   };
 
   useEffect(() => {

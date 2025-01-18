@@ -9,9 +9,9 @@ const options: ConnectionOptions = {
   password: process.env.DB_PASS,
 };
 
-export const dbBaseQuery = async (query: string) => {
+export const dbBaseQuery = async (query: string, values: number[] = []) => {
   const conn = await createConnection(options);
-  const [result] = await conn.query(query);
+  const [result] = await conn.query(query, values);
   // connection must be ended here!!!
   // Does not seems to close by garbage collector
   conn.end();

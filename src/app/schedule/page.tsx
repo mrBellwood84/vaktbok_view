@@ -1,6 +1,7 @@
 "use client";
 
 import { DataLoadbar, DataLoadbarFailed } from "@/component/Loadbar";
+import { ScheduleTable } from "@/component/schedule/ScheduleTable";
 import { YearWeekSelect } from "@/component/schedule/WeekYearSelect";
 import { getAllWorkday } from "@/lib/db_service/query/db_schedule";
 import { scheduleSlice } from "@/lib/store/features/schedule";
@@ -9,8 +10,10 @@ import { Box } from "@mui/material";
 import { useEffect, useRef } from "react";
 
 const Page = () => {
-  const dbCalled = useAppSelector((state) => state.schedule.dbWorkweekCalled);
-  const loadSuccess = useAppSelector(
+  const dbWorkweekCalled = useAppSelector(
+    (state) => state.schedule.dbWorkweekCalled
+  );
+  const dbWorkweekSuccess = useAppSelector(
     (state) => state.schedule.dbWorkweekSuccess
   );
   const apiCalled = useRef<boolean>(false);
@@ -32,11 +35,12 @@ const Page = () => {
     }
   });
 
-  if (!dbCalled) return <DataLoadbar />;
-  if (!loadSuccess) return <DataLoadbarFailed />;
+  if (!dbWorkweekCalled) return <DataLoadbar />;
+  if (!dbWorkweekSuccess) return <DataLoadbarFailed />;
   return (
     <Box>
       <YearWeekSelect />
+      <ScheduleTable />
     </Box>
   );
 };
