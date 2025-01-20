@@ -26,7 +26,9 @@ const RootLayout = ({ children }: IProps) => {
         <body>
           <StoreProvider>
             <TopBar />
-            <Container sx={{ mt: 2 }}>{children}</Container>
+            <Container maxWidth="xl" sx={{ mt: 2 }}>
+              {children}
+            </Container>
           </StoreProvider>
         </body>
       </html>

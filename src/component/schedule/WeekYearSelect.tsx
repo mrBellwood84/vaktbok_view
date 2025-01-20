@@ -1,5 +1,6 @@
 "use client";
 
+import { formatTimestamp } from "@/lib/db_service/post_process/timestamp";
 import { getShiftByWeekYear } from "@/lib/db_service/query/db_schedule";
 import { scheduleSlice } from "@/lib/store/features/schedule";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
@@ -102,7 +103,7 @@ export const YearWeekSelect = () => {
     getShiftByWeekYear(weekN, year)
       .then((data) => {
         const reformed = data.map((x) => {
-          x.timestamp = x.timestamp.toLocaleString();
+          x.timestamp = formatTimestamp(x.timestamp as Date);
           return x;
         });
         dispatch(scheduleSlice.actions.setAllShifts(reformed));

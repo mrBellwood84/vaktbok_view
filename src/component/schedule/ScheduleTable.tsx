@@ -8,8 +8,8 @@ export const ScheduleTable = () => {
   const dbShiftSuccess = useAppSelector((s) => s.schedule.dbShiftSuccess);
 
   return (
-    <TableContainer sx={{ mt: 2, mb: 2 }}>
-      <Table>
+    <TableContainer sx={{ mt: 2, mb: 2, maxHeight: "84vh" }}>
+      <Table stickyHeader>
         {!dbShiftCalled && !dbShiftSuccess && <ScheduleTableLoading />}
         {dbShiftCalled && dbShiftSuccess && <ScheduleTableData />}
       </Table>
