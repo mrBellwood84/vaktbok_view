@@ -1,33 +1,40 @@
-import { IShift } from "@/lib/model/IShift";
 import { IWorkday } from "@/lib/model/IWorkday";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { IscheduleItem, IShiftStateModel } from "./lib/scheduleStateModels";
+import { getCurrentWeek, getCurrentYear } from "@/lib/utils/datetimeFunctions";
+import { IShift } from "@/lib/model/IShift";
+import {
+  createShiftStateModel,
+  setFilteredShiftsByName,
+} from "./lib/scheduleStateFunctions";
 
 interface IScheduleState {
   allWorkdays: IWorkday[];
-  shifts: IShift[];
 
+  allShiftsStateModels: IShiftStateModel[];
+  currentShiftStateModels?: IShiftStateModel;
+  filteredSceduleItem: IscheduleItem[];
+
+  nameFilter: string;
   selectedYear: number;
-  selectedWeekN: number;
+  selectedWeek: number;
 
-  dbWorkweekCalled: boolean;
-  dbWorkweekSuccess: boolean;
-
-  dbShiftCalled: boolean;
-  dbShiftSuccess: boolean;
+  workweekLoading: boolean;
+  shiftLoading: boolean;
 }
 
 const initialState: IScheduleState = {
   allWorkdays: [],
-  shifts: [],
 
-  selectedYear: 0,
-  selectedWeekN: 0,
+  allShiftsStateModels: [],
+  filteredSceduleItem: [],
 
-  dbWorkweekCalled: false,
-  dbWorkweekSuccess: false,
+  nameFilter: "",
+  selectedYear: getCurrentYear(),
+  selectedWeek: getCurrentWeek(),
 
-  dbShiftCalled: false,
-  dbShiftSuccess: false,
+  workweekLoading: true,
+  shiftLoading: true,
 };
 
 export const scheduleSlice = createSlice({
@@ -35,42 +42,44 @@ export const scheduleSlice = createSlice({
   initialState,
   reducers: {
     setAllWorkdays: (state, action: PayloadAction<IWorkday[]>) => {
-      state.allWorkdays = action.payload.sort((a, b) => {
-        if (a.date < b.date) return -1;
-        return 1;
-      });
-    },
-    setAllShifts: (state, action: PayloadAction<IShift[]>) => {
-      state.shifts = action.payload.sort((a, b) => {
-        if (a.name < b.name) return -1;
-        return 1;
-      });
+      state.allWorkdays = action.payload;
+      state.workweekLoading = false;
     },
 
-    setSelectedWeekYear: (
+    insertShifts: (
       state,
-      action: PayloadAction<{ year: number; weekN: number }>
+      action: PayloadAction<{ shifts: IShift[]; week: number; year: number }>
     ) => {
-      state.selectedYear = action.payload.year;
-      state.selectedWeekN = action.payload.weekN;
+      const { shifts, week, year } = action.payload;
+      const all = [...state.allShiftsStateModels];
+      const shiftModel = createShiftStateModel(shifts, week, year);
+
+      all.push(shiftModel);
+
+      state.allShiftsStateModels = all;
+      state.currentShiftStateModels = shiftModel;
+      state.filteredSceduleItem = setFilteredShiftsByName(shiftModel);
+      state.selectedWeek = week;
+      state.selectedYear = year;
+      state.shiftLoading = false;
     },
 
-    setDbWorkweekCalled: (state) => {
-      state.dbWorkweekCalled = true;
-    },
-    setDbWookweekSuccess: (state) => {
-      state.dbWorkweekSuccess = true;
+    setWeekYear: (
+      state,
+      action: PayloadAction<{ week: number; year: number }>
+    ) => {
+      const { week, year } = action.payload;
+      state.selectedWeek = week;
+      state.selectedYear = year;
     },
 
-    reloadDbShift: (state) => {
-      state.dbShiftCalled = false;
-      state.dbShiftSuccess = false;
+    setNameFilter: (state, action: PayloadAction<string>) => {
+      const name = action.payload;
+      state.nameFilter = name;
     },
-    setDbShiftCalled: (state) => {
-      state.dbShiftCalled = true;
-    },
-    setDbShiftSuccess: (state) => {
-      state.dbShiftSuccess = true;
+
+    setShiftLoading: (state) => {
+      state.shiftLoading = true;
     },
   },
 });

@@ -1,17 +1,19 @@
-import { Table, TableContainer } from "@mui/material";
-import { ScheduleTableLoading } from "./table/ScheduleTableLoading";
-import { ScheduleTableData } from "./table/ScheduleTableData";
+"use client";
+
+import { Paper, Table, TableContainer } from "@mui/material";
+import { ScheduleTableHeader } from "./ScheduleTableHeader";
+import { ScheduleTableBody } from "./ScheduleTableBody";
 import { useAppSelector } from "@/lib/store/hooks";
 
 export const ScheduleTable = () => {
-  const dbShiftCalled = useAppSelector((s) => s.schedule.dbShiftCalled);
-  const dbShiftSuccess = useAppSelector((s) => s.schedule.dbShiftSuccess);
+  const loading = useAppSelector((s) => s.schedule.workweekLoading);
+  if (loading) return null;
 
   return (
-    <TableContainer sx={{ mt: 2, mb: 2, maxHeight: "84vh" }}>
-      <Table stickyHeader>
-        {!dbShiftCalled && !dbShiftSuccess && <ScheduleTableLoading />}
-        {dbShiftCalled && dbShiftSuccess && <ScheduleTableData />}
+    <TableContainer component={Paper}>
+      <Table>
+        <ScheduleTableHeader />
+        <ScheduleTableBody />
       </Table>
     </TableContainer>
   );

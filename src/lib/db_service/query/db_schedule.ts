@@ -3,8 +3,9 @@
 import { IWorkday } from "@/lib/model/IWorkday";
 import { dbBaseQuery } from "./db_root";
 import { IShift } from "@/lib/model/IShift";
+import { formatTimestamp } from "@/lib/utils/datetimeFunctions";
 
-const SELECT_WORKDAYS = "SELECT * FROM workday";
+const SELECT_WORKDAYS = "SELECT * FROM workday ORDER BY date";
 const SELECT_SHIFTS =
   "SELECT e.name as name, w.weekday as day, sc.code as code, sc.start as start, sc.end as end, s.timestamp as timestamp  FROM shift AS s JOIN employee AS e ON e.id = s.employee_id JOIN workday AS w ON w.id = s.workday_id JOIN shiftcode AS sc on sc.id = s.shiftcode_id WHERE w.weeknumber = ? and w.year = ?";
 
@@ -15,5 +16,6 @@ export const getAllWorkday = async () => {
 
 export const getShiftByWeekYear = async (weekN: number, year: number) => {
   const data = (await dbBaseQuery(SELECT_SHIFTS, [weekN, year])) as IShift[];
+  data.map((d) => (d.timestamp = formatTimestamp(d.timestamp as Date)));
   return data;
 };
