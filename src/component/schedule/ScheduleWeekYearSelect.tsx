@@ -21,8 +21,9 @@ export const ScheduleWeekYearSelect = () => {
   const dispatch = useAppDispatch();
 
   const workdays = useAppSelector((s) => s.schedule.allWorkdays);
-  const week = useAppSelector((s) => s.schedule.selectedWeek);
-  const year = useAppSelector((s) => s.schedule.selectedYear);
+  const allShiftState = useAppSelector((s) => s.schedule.allShiftsStateModels);
+  const stateWeek = useAppSelector((s) => s.schedule.selectedWeek);
+  const stateYear = useAppSelector((s) => s.schedule.selectedYear);
   const loading = useAppSelector((s) => s.schedule.workweekLoading);
 
   const [weekYearData, setWeekYearData] = useState<IWeekYear[]>([]);
@@ -59,7 +60,7 @@ export const ScheduleWeekYearSelect = () => {
     dispatch(scheduleSlice.actions.setAllWorkdays(data));
   };
 
-  const loadCurrentShiftStateModel = async () => {
+  const loadCurrentShiftStateModel = async (week: number, year: number) => {
     dispatch(scheduleSlice.actions.setShiftLoading());
     const shifts = await getShiftByWeekYear(week, year);
     dispatch(scheduleSlice.actions.insertShifts({ shifts, week, year }));
@@ -69,23 +70,37 @@ export const ScheduleWeekYearSelect = () => {
     if (!workdaysLoaded.current)
       createWeekDayData().finally(() => (workdaysLoaded.current = true));
     if (!shiftsLoaded.current)
-      loadCurrentShiftStateModel().finally(() => (shiftsLoaded.current = true));
+      loadCurrentShiftStateModel(stateWeek, stateYear).finally(
+        () => (shiftsLoaded.current = true)
+      );
+  };
+
+  const handleWeekChange = (week: number, year: number) => {
+    const shifts = allShiftState.find(
+      (x) => x.week === week && x.year === year
+    );
+
+    if (shifts) {
+      dispatch(scheduleSlice.actions.setShiftLoading());
+      dispatch(scheduleSlice.actions.setWeekYear({ shifts, week, year }));
+      return;
+    }
+
+    loadCurrentShiftStateModel(week, year);
   };
 
   const handleWeekClick = (n: 1 | -1) => {
     const index = wyDataIndex + n;
     const current = weekYearData[index];
-
-    dispatch(scheduleSlice.actions.setWeekYear(current));
+    handleWeekChange(current.week, current.year);
     setWyDataIndex(index);
   };
 
   const handleSliderChange = (e: Event, v: number | number[]) => {
     const index = v as number;
     const current = weekYearData[index];
-
+    handleWeekChange(current.week, current.year);
     setWyDataIndex(index);
-    dispatch(scheduleSlice.actions.setWeekYear(current));
   };
 
   useEffect(() => {
@@ -112,7 +127,7 @@ export const ScheduleWeekYearSelect = () => {
           color="secondary"
           sx={{ userSelect: "none", fontWeight: 600 }}
         >
-          Uke {week} | {year}
+          Uke {stateWeek} | {stateYear}
         </Typography>
 
         <IconButton

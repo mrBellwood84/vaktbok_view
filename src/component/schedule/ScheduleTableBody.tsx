@@ -1,7 +1,13 @@
 "use client";
 
 import { useAppSelector } from "@/lib/store/hooks";
-import { Skeleton, TableBody, TableCell, TableRow } from "@mui/material";
+import {
+  Skeleton,
+  TableBody,
+  TableCell,
+  TableRow,
+  Typography,
+} from "@mui/material";
 import { ScheduleTableBodyCell } from "./ScheduleTableBodyCell";
 
 const BodyLoading = () => {
@@ -33,8 +39,10 @@ export const ScheduleTableBody = () => {
   return (
     <TableBody>
       {items.map((x, i) => (
-        <TableRow key={`row-${i}`}>
-          <TableCell>{x.name}</TableCell>
+        <TableRow key={`row-${i}`} hover>
+          <TableCell>
+            <Typography variant="subtitle2">{x.name}</Typography>
+          </TableCell>
           {x.shifts.map((y, j) => (
             <ScheduleTableBodyCell key={`row-${i}-cell${j}`} shifts={y} />
           ))}

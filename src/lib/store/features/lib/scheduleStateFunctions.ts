@@ -38,7 +38,12 @@ export const createShiftStateModel = (
   return result;
 };
 
-export const setFilteredShiftsByName = (stateModel: IShiftStateModel) => {
-  const filteredList = [...stateModel.data];
+export const setFilteredShiftsByName = (
+  stateModel: IShiftStateModel,
+  nameQuery: string
+) => {
+  const filteredList = [...stateModel.data].filter((x) => {
+    if (x.name.toLowerCase().match(nameQuery)) return x;
+  });
   return filteredList;
 };

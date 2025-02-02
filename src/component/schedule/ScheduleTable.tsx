@@ -1,6 +1,6 @@
 "use client";
 
-import { Paper, Table, TableContainer } from "@mui/material";
+import { Table, TableContainer } from "@mui/material";
 import { ScheduleTableHeader } from "./ScheduleTableHeader";
 import { ScheduleTableBody } from "./ScheduleTableBody";
 import { useAppSelector } from "@/lib/store/hooks";
@@ -10,8 +10,8 @@ export const ScheduleTable = () => {
   if (loading) return null;
 
   return (
-    <TableContainer component={Paper}>
-      <Table>
+    <TableContainer sx={{ maxHeight: "85vh" }}>
+      <Table stickyHeader size="small">
         <ScheduleTableHeader />
         <ScheduleTableBody />
       </Table>

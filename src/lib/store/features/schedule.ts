@@ -58,7 +58,10 @@ export const scheduleSlice = createSlice({
 
       state.allShiftsStateModels = all;
       state.currentShiftStateModels = shiftModel;
-      state.filteredSceduleItem = setFilteredShiftsByName(shiftModel);
+      state.filteredSceduleItem = setFilteredShiftsByName(
+        shiftModel,
+        state.nameFilter
+      );
       state.selectedWeek = week;
       state.selectedYear = year;
       state.shiftLoading = false;
@@ -66,16 +69,30 @@ export const scheduleSlice = createSlice({
 
     setWeekYear: (
       state,
-      action: PayloadAction<{ week: number; year: number }>
+      action: PayloadAction<{
+        shifts: IShiftStateModel;
+        week: number;
+        year: number;
+      }>
     ) => {
-      const { week, year } = action.payload;
+      const { shifts, week, year } = action.payload;
+      state.currentShiftStateModels = shifts;
+      state.filteredSceduleItem = setFilteredShiftsByName(
+        shifts,
+        state.nameFilter
+      );
       state.selectedWeek = week;
       state.selectedYear = year;
+      state.shiftLoading = false;
     },
 
     setNameFilter: (state, action: PayloadAction<string>) => {
       const name = action.payload;
       state.nameFilter = name;
+      state.filteredSceduleItem = setFilteredShiftsByName(
+        state.currentShiftStateModels!,
+        name
+      );
     },
 
     setShiftLoading: (state) => {
